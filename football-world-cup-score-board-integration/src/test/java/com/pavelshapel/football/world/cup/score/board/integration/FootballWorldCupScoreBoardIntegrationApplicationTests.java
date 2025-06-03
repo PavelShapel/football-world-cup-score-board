@@ -1,12 +1,19 @@
 package com.pavelshapel.football.world.cup.score.board.integration;
 
+import com.pavelshapel.football.world.cup.score.board.dao.model.Game;
+import com.pavelshapel.football.world.cup.score.board.service.FootballWorldCupScoreBoardServiceApplication;
+import com.pavelshapel.football.world.cup.score.board.service.board.BoardService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
+@SpringBootTest(classes = FootballWorldCupScoreBoardServiceApplication.class)
 class FootballWorldCupScoreBoardIntegrationApplicationTests {
 
     @Autowired
@@ -99,6 +106,39 @@ class FootballWorldCupScoreBoardIntegrationApplicationTests {
 
         assertThat(boarSummary)
                 .isEmpty();
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "   "})
+    void shouldThrowExceptionWhenHomeTeamTitleIsNullOrEmpty(
+            String homeTeamTitle
+    ) {
+        assertThatThrownBy(() -> boardService.startGame(homeTeamTitle, "Canada"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Title cannot be null or blank");
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "   "})
+    void shouldThrowExceptionWhenAwayTeamTitleIsNullOrEmpty(
+            String awayTeamTitle
+    ) {
+        assertThatThrownBy(() -> boardService.startGame("Mexico", awayTeamTitle))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Title cannot be null or blank");
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "   "})
+    void shouldThrowExceptionWhenHomeAndAwayTeamTitlesIsNullOrEmpty(
+            String teamTitle
+    ) {
+        assertThatThrownBy(() -> boardService.startGame(teamTitle, teamTitle))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Title cannot be null or blank");
     }
 
     private Game updateGame(

@@ -14,4 +14,11 @@
     <artifactId>football-world-cup-score-board-integration</artifactId>
     <name>football-world-cup-score-board-integration</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.pavelshapel</groupId>
+            <artifactId>football-world-cup-score-board-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>
