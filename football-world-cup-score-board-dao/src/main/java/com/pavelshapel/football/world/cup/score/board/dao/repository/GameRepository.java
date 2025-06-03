@@ -11,7 +11,8 @@ public class GameRepository {
     private final Database database;
 
     public GameRepository(
-            final Database database) {
+            final Database database
+    ) {
         this.database = database;
     }
 

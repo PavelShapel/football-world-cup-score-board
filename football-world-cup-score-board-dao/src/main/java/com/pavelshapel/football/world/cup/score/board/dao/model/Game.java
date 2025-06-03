@@ -21,7 +21,7 @@ public record Game(
     ) {
         if (score() < game.score()) {
             return 1;
-        } else if (this.score() > game.score()) {
+        } else if (score() > game.score()) {
             return -1;
         } else {
             return game.id.compareTo(id);
