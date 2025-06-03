@@ -61,7 +61,7 @@ class GameTest {
     }
 
     @Test
-    void shouldReturnCorrectComparisonWhenScoresAreDifferent() {
+    void shouldReturnPositiveComparisonWhenScoresAreDifferent() {
         var rivals1 = new Rivals(
                 new Team("homeTeam1", 10),
                 new Team("awayTeam1", 20)
@@ -77,6 +77,25 @@ class GameTest {
 
         assertThat(result)
                 .isEqualTo(1);
+    }
+
+    @Test
+    void shouldReturnNegativeComparisonWhenScoresAreDifferent() {
+        var rivals1 = new Rivals(
+                new Team("homeTeam1", 25),
+                new Team("awayTeam1", 20)
+        );
+        var rivals2 = new Rivals(
+                new Team("homeTeam2", 15),
+                new Team("awayTeam2", 25)
+        );
+        var game1 = new Game(1, rivals1, IN_PROGRESS);
+        var game2 = new Game(2, rivals2, IN_PROGRESS);
+
+        var result = game1.compareTo(game2);
+
+        assertThat(result)
+                .isEqualTo(-1);
     }
 
     @Test
