@@ -19,6 +19,7 @@
     </properties>
 
     <modules>
+        <module>football-world-cup-score-board-dao</module>
         <module>football-world-cup-score-board-integration</module>
         <module>football-world-cup-score-board-jacoco</module>
     </modules>
