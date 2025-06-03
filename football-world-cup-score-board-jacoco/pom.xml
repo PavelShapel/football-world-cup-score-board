@@ -15,6 +15,14 @@
     <name>football-world-cup-score-board-jacoco</name>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.pavelshapel</groupId>
+            <artifactId>football-world-cup-score-board-dao</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
