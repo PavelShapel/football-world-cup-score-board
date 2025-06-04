@@ -111,11 +111,11 @@ class DatabaseTest {
         var rivals2 = Mockito.mock(Rivals.class);
         var status1 = Mockito.mock(Status.class);
         var status2 = Mockito.mock(Status.class);
-        var originalGame = new Game(1, rivals1, status1);
-        var updatedGame = new Game(1, rivals2, status2);
-        database.insert(originalGame);
+        var game1 = new Game(1, rivals1, status1);
+        var game2 = new Game(1, rivals2, status2);
+        database.insert(game1);
 
-        var result = database.insert(updatedGame);
+        var result = database.insert(game2);
 
         assertThat(result)
                 .isNotNull()
