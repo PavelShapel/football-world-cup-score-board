@@ -42,7 +42,7 @@ class ProdGameComparatorSupplierTest {
     void shouldProvideComparatorSortingByScoreAndIdInDescendingOrder(
             GameComparatorTestCase testCase
     ) {
-        int result = gameComparatorSupplier.get().compare(testCase.game1, testCase.game2);
+        var result = gameComparatorSupplier.get().compare(testCase.game1, testCase.game2);
 
         assertThat(result)
                 .isEqualTo(testCase.expected);

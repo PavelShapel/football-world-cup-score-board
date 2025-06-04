@@ -1,4 +1,4 @@
-package com.pavelshapel.football.world.cup.score.board.service.board.comparator.impl;
+package com.pavelshapel.football.world.cup.score.board.service.board.filter.impl;
 
 import com.pavelshapel.football.world.cup.score.board.dao.model.Game;
 import com.pavelshapel.football.world.cup.score.board.dao.model.Rivals;
@@ -12,37 +12,39 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.stream.Stream;
 
+import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.FINISHED;
 import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.IN_PROGRESS;
+import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.ARRAY;
 
-class NotProdGameComparatorSupplierTest {
+class ProdGameStatusFilterSupplierTest {
 
-    private NotProdGameComparatorSupplier gameComparatorSupplier;
+    private ProdGameStatusFilterSupplier gameStatusFilterSupplier;
 
     @BeforeEach
     void setUp() {
-        gameComparatorSupplier = new NotProdGameComparatorSupplier();
+        gameStatusFilterSupplier = new ProdGameStatusFilterSupplier();
     }
 
     @Test
     void shouldReturnProdForProfileAnnotationPropertyValue() {
-        var annotation = NotProdGameComparatorSupplier.class
+        var annotation = ProdGameStatusFilterSupplier.class
                 .getAnnotation(Profile.class);
 
         assertThat(annotation)
                 .isNotNull()
                 .extracting(Profile::value)
                 .asInstanceOf(ARRAY)
-                .containsExactly("!prod");
+                .containsExactly("prod");
     }
 
     @ParameterizedTest
     @MethodSource("gameComparatorTestCase")
-    void shouldProvideComparatorSortingByScoreAndIdInDescendingOrder(
+    void shouldProvideStatusFilter(
             GameComparatorTestCase testCase
     ) {
-        var result = gameComparatorSupplier.get().compare(testCase.game1, testCase.game2);
+        var result = gameStatusFilterSupplier.get().test(testCase.game);
 
         assertThat(result)
                 .isEqualTo(testCase.expected);
@@ -57,62 +59,40 @@ class NotProdGameComparatorSupplierTest {
                                         new Rivals(
                                                 new Team("homeTeam", 1),
                                                 new Team("awayTeam", 1)),
-                                        IN_PROGRESS
+                                        STARTED
                                 ),
-                                new Game(
-                                        2,
-                                        new Rivals(
-                                                new Team("homeTeam", 2),
-                                                new Team("awayTeam", 2)),
-                                        IN_PROGRESS
-                                ),
-                                -1
+                                true
                         )
                 ),
                 Arguments.of(
                         new GameComparatorTestCase(
                                 new Game(
-                                        3,
-                                        new Rivals(
-                                                new Team("homeTeam", 2),
-                                                new Team("awayTeam", 2)),
-                                        IN_PROGRESS
-                                ),
-                                new Game(
-                                        4,
+                                        1,
                                         new Rivals(
                                                 new Team("homeTeam", 1),
                                                 new Team("awayTeam", 1)),
                                         IN_PROGRESS
                                 ),
-                                1
+                                true
                         )
                 ), Arguments.of(
                         new GameComparatorTestCase(
                                 new Game(
-                                        5,
+                                        1,
                                         new Rivals(
-                                                new Team("homeTeam", 2),
-                                                new Team("awayTeam", 2)),
-                                        IN_PROGRESS
+                                                new Team("homeTeam", 1),
+                                                new Team("awayTeam", 1)),
+                                        FINISHED
                                 ),
-                                new Game(
-                                        6,
-                                        new Rivals(
-                                                new Team("homeTeam", 2),
-                                                new Team("awayTeam", 2)),
-                                        IN_PROGRESS
-                                ),
-                                0
+                                false
                         )
                 )
         );
     }
 
     private record GameComparatorTestCase(
-            Game game1,
-            Game game2,
-            int expected
+            Game game,
+            boolean expected
     ) {
     }
 }
