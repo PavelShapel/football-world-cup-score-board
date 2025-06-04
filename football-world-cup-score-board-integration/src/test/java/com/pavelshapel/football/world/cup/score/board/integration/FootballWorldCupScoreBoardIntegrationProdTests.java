@@ -9,12 +9,14 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(classes = FootballWorldCupScoreBoardServiceApplication.class)
-class FootballWorldCupScoreBoardIntegrationApplicationTests {
+@ActiveProfiles("prod")
+class FootballWorldCupScoreBoardIntegrationProdTests {
 
     @Autowired
     private BoardService boardService;

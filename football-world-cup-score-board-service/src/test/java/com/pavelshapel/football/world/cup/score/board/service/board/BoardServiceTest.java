@@ -1,6 +1,7 @@
 package com.pavelshapel.football.world.cup.score.board.service.board;
 
 import com.pavelshapel.football.world.cup.score.board.dao.model.Game;
+import com.pavelshapel.football.world.cup.score.board.service.board.comparator.GameComparatorSupplier;
 import com.pavelshapel.football.world.cup.score.board.service.game.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.FINISHED;
@@ -24,11 +26,14 @@ class BoardServiceTest {
     @Mock
     private GameService gameService;
 
+    @Mock
+    private GameComparatorSupplier gameComparatorSupplier;
+
     private BoardService boardService;
 
     @BeforeEach
     void setUp() {
-        boardService = new BoardService(gameService);
+        boardService = new BoardService(gameService, gameComparatorSupplier);
     }
 
     @Test
@@ -76,6 +81,8 @@ class BoardServiceTest {
         doReturn(games).when(gameService).getAllGames();
         doReturn(IN_PROGRESS).when(game1).status();
         doReturn(FINISHED).when(game2).status();
+        var gameComparator = mock(Comparator.class);
+        doReturn(gameComparator).when(gameComparatorSupplier).get();
 
         var result = boardService.getSummary();
 
