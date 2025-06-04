@@ -2,6 +2,7 @@ package com.pavelshapel.football.world.cup.score.board.service.board;
 
 import com.pavelshapel.football.world.cup.score.board.dao.model.Game;
 import com.pavelshapel.football.world.cup.score.board.service.board.comparator.GameComparatorSupplier;
+import com.pavelshapel.football.world.cup.score.board.service.board.filter.GameStatusFilterSupplier;
 import com.pavelshapel.football.world.cup.score.board.service.game.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.FINISHED;
 import static com.pavelshapel.football.world.cup.score.board.dao.model.Status.IN_PROGRESS;
@@ -29,11 +31,18 @@ class BoardServiceTest {
     @Mock
     private GameComparatorSupplier gameComparatorSupplier;
 
+    @Mock
+    private GameStatusFilterSupplier gameStatusFilterSupplier;
+
     private BoardService boardService;
 
     @BeforeEach
     void setUp() {
-        boardService = new BoardService(gameService, gameComparatorSupplier);
+        boardService = new BoardService(
+                gameService,
+                gameComparatorSupplier,
+                gameStatusFilterSupplier
+        );
     }
 
     @Test
@@ -83,6 +92,8 @@ class BoardServiceTest {
         doReturn(FINISHED).when(game2).status();
         var gameComparator = mock(Comparator.class);
         doReturn(gameComparator).when(gameComparatorSupplier).get();
+        Predicate<Game> gameStatusFilter = game -> game.status() == IN_PROGRESS;
+        doReturn(gameStatusFilter).when(gameStatusFilterSupplier).get();
 
         var result = boardService.getSummary();
 
