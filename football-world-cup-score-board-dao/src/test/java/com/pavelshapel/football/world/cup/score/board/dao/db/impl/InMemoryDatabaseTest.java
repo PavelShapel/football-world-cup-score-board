@@ -1,4 +1,4 @@
-package com.pavelshapel.football.world.cup.score.board.dao.db;
+package com.pavelshapel.football.world.cup.score.board.dao.db.impl;
 
 import com.pavelshapel.football.world.cup.score.board.dao.model.Game;
 import com.pavelshapel.football.world.cup.score.board.dao.model.Rivals;
@@ -10,12 +10,12 @@ import org.mockito.Mockito;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class DatabaseTest {
-    private Database database;
+class InMemoryDatabaseTest {
+    private InMemoryDatabase database;
 
     @BeforeEach
     void setUp() {
-        database = new Database();
+        database = new InMemoryDatabase();
     }
 
     @Test
